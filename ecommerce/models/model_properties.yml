@@ -1,0 +1,12 @@
+version: 2
+
+models:
+  - name: stg_customer
+    description: Initial import of the olist data from the ecommerce database in postgresql. This model is used to create the staging models for the olist data.
+    columns:
+      - name: customer_id
+        tests:
+          - not_null
+          - unique
+          
+    access: public

@@ -1,0 +1,12 @@
+langchain
+langchain-community
+langchain-ollama
+langchain-chroma
+pandas
+duckdb
+dbt-core
+dbt-postgres
+dagster
+dagster-webserver
+dagster-postgres
+dagster-dbt
