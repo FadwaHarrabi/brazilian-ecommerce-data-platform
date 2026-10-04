@@ -1,0 +1,15 @@
+version: 2
+sources:
+   - name: bronze
+     database: Olist
+     schema: bronze
+     tables:
+        - name: category_name_translation
+        - name: customers
+        - name: geolocation
+        - name: items
+        - name: orders
+        - name: payments
+        - name: products
+        - name: reviews
+        - name: sellers
