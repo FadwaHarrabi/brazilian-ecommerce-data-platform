@@ -1,4 +1,4 @@
-{{config(materialized='table')}}
+
 SELECT *
-FROM public.customer
+FROM {{source('bronze','customer')}}
 WHERE customer_id IS NOT NULL
