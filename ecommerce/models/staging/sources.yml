@@ -5,7 +5,7 @@ sources:
      schema: bronze
      tables:
         - name: category_name_translation
-        - name: customers
+        - name: customer
         - name: geolocation
         - name: items
         - name: orders
