@@ -1,3 +1,16 @@
+x-superset-common: &superset-common
+  image: apache/superset:4.1.1
+  user: root
+  environment:
+    SUPERSET_CONFIG_PATH: /app/docker/superset_config.py
+    SUPERSET_SECRET_KEY: "change-this-to-a-long-random-text-1234567890"
+    SQLALCHEMY_DATABASE_URI: "postgresql+psycopg2://postgres:admin@postgres:5432/postgres"
+  volumes:
+    - ./docker:/app/docker
+    - superset_home:/app/superset_home
+  networks:
+    - my_network
+
 services:
 
   postgres:
@@ -59,7 +72,39 @@ services:
       - ./database_schema:/flyway/sql
     networks:
       - my_network
+  redis:
+    image: redis:7
+    container_name: superset_cache
+    restart: unless-stopped
+    volumes:
+      - redis_data:/data
+    networks:
+      - my_network
 
+  superset-init:
+    <<: *superset-common
+    container_name: superset_init
+    command: >
+      sh -c "pip install psycopg2-binary &&
+             superset db upgrade &&
+             superset fab create-admin --username admin --firstname Admin --lastname User --email admin@example.com --password admin &&
+             superset init"
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+  superset:
+    <<: *superset-common
+    container_name: superset_app
+    command: >
+      sh -c "pip install psycopg2-binary &&
+             gunicorn --bind 0.0.0.0:8088 --workers 2 --timeout 120 'superset.app:create_app()'"
+    restart: unless-stopped
+    ports:
+      - "8089:8088"
+    depends_on:
+      superset-init:
+        condition: service_completed_successfully
 
 networks:
    my_network:
@@ -67,3 +112,5 @@ networks:
 
 volumes:
   postgres_data:
+  superset_home:
+  redis_data:

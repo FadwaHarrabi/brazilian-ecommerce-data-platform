@@ -1,5 +1,7 @@
-SELECT 
-    Id INT ALWAYS GENERATED AS IDENTITY PRIMARY KEY,
+{{ config(materialized='table') }}
+
+SELECT
+    ROW_NUMBER() OVER (ORDER BY Id) AS Id,
     Id AS ProductId,
     CategoryNameBr,
     CategoryNameEn,
@@ -7,4 +9,4 @@ SELECT
     Length,
     Height,
     Width
-FROM {{ref('stg_products')}}
+FROM {{ ref('stg_products') }}

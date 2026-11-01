@@ -1,11 +1,12 @@
 SELECT 
 
-      geolocation_id AS Id,
+      geolocation_zip_code_prefix AS Id,
       geolocation_zip_code_prefix AS ZipCode,
-      geolocation_lng AS Longitude,
-      geolocation_lat AS Latitude,
-      INITCAP(geolocation_city) AS City,
-      geolocation_state AS State
-
+      AVG(geolocation_lng) AS Longitude,
+      AVG(geolocation_lat) AS Latitude,
+      MAX(INITCAP(geolocation_city)) AS City,
+      MAX(geolocation_state) AS State
 
 FROM {{ source('bronze', 'geolocation') }}
+GROUP BY geolocation_zip_code_prefix
+ORDER BY geolocation_zip_code_prefix ASC

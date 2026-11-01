@@ -16,11 +16,10 @@ def customer():
         password="admin",
         database="Olist"
     )
-
     cursor=conn.cursor()
     customer_data = pd.read_csv("data/olist_customers_dataset.csv")
     customer_data = customer_data.where(pd.notnull(customer_data), None)
-
+    cursor.execute("TRUNCATE TABLE bronze.customer")
     for _,row in customer_data.iterrows():
         query="""
         INSERT INTO bronze.customer (customer_id,customer_unique_id,customer_zip_code_prefix,customer_city,customer_state)
@@ -41,6 +40,7 @@ def geolocation():
             database="Olist"
         )
     cursor=conn.cursor()
+    cursor.execute("TRUNCATE TABLE bronze.geolocation")
     for _,row in geolocation_data.iterrows():
         query="""
         INSERT INTO bronze.geolocation (geolocation_zip_code_prefix,geolocation_lat,geolocation_lng,geolocation_city, geolocation_state)
@@ -62,6 +62,7 @@ def order_items():
             database="Olist"
         )
     cursor=conn.cursor()
+    cursor.execute("TRUNCATE TABLE bronze.items")
     for i,row in order_items_data.iterrows():
         query="""
         INSERT INTO bronze.items (order_id,order_item_id,product_id,seller_id,shipping_limit_date,price,freight_value)
@@ -83,6 +84,7 @@ def order_payments():
             database="Olist"
         )
     cursor=conn.cursor()
+    cursor.execute("TRUNCATE TABLE bronze.payments")
     for i,row in order_payments_data.iterrows():
         query="""
         INSERT INTO bronze.payments (order_id,payment_sequential,payment_type,payment_installments,payment_value)
@@ -104,6 +106,7 @@ def order_reviews():
             database="Olist"
         )
     cursor=conn.cursor()
+    cursor.execute("TRUNCATE TABLE bronze.reviews")
     for i,row in order_reviews_data.iterrows():
         query="""
         INSERT INTO bronze.reviews (review_id,order_id,review_score,review_comment_title,review_comment_message,review_creation_date,review_answer_timestamp)
@@ -125,6 +128,7 @@ def order():
             database="Olist"
         )
     cursor=conn.cursor()
+    cursor.execute("TRUNCATE TABLE bronze.orders")
     for i,row in order_data.iterrows():
         query="""
         INSERT INTO bronze.orders (order_id,customer_id,order_status,order_purchase_timestamp,order_approved_at,order_delivered_carrier_date,order_delivered_customer_date,order_estimated_delivery_date)
@@ -146,6 +150,7 @@ def product():
             database="Olist"
         )
     cursor=conn.cursor()
+    cursor.execute("TRUNCATE TABLE bronze.products")
     for _,row in product_data.iterrows():
         query="""
         INSERT INTO bronze.products (product_id,product_category_name,product_name_lenght,product_description_lenght,product_photos_qty,product_weight_g,product_length_cm,product_height_cm,product_width_cm)
@@ -167,6 +172,7 @@ def sellers():
             database="Olist"
         )
     cursor=conn.cursor()
+    cursor.execute("TRUNCATE TABLE bronze.sellers")
     for _,row in sellers_data.iterrows():
         query="""
         INSERT INTO bronze.sellers (seller_id,seller_zip_code_prefix,seller_city,seller_state)
@@ -188,6 +194,7 @@ def product_category_name_translation():
             database="Olist"
         )
     cursor=conn.cursor()
+    cursor.execute("TRUNCATE TABLE bronze.category_name_translation")
     for _,row in product_category_name_translation_data.iterrows():
         query="""
         INSERT INTO bronze.category_name_translation (product_category_name,product_category_name_english)

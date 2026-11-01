@@ -1,10 +1,13 @@
-SELECT 
-      Id INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY 
-      Id AS GeolocationId,
-      ZipCode,
-      Longitude,
-      Latitude,
-      City,
-      State
+{{ config(materialized='table') }}
 
-FROM {{ref('stg_geolocation')}}
+SELECT
+    ROW_NUMBER() OVER (
+        ORDER BY ZipCode, Longitude, Latitude
+    ) AS Id,
+    Id AS GeolocationId,
+    ZipCode,
+    Longitude,
+    Latitude,
+    City,
+    State
+FROM {{ ref('stg_geolocation') }}
