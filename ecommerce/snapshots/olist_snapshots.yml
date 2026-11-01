@@ -1,0 +1,22 @@
+snapshots:
+   - name: reviews
+     relation: source('bronze','reviews')
+     config:
+       schema: snapshots
+       unique_key: [review_id, order_id]
+       strategy: timestamp
+       updated_at: review_answer_timestamp
+   - name: orders
+     relation: source('bronze','orders')
+     config:
+       schema: snapshots
+       unique_key: order_id
+       strategy: timestamp
+       updated_at: order_purchase_timestamp
+   - name: items
+     relation: source('bronze','items')
+     config:
+       schema: snapshots
+       unique_key: [order_id, order_item_id]
+       strategy: timestamp
+       updated_at: shipping_limit_date
